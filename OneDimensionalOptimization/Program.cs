@@ -30,7 +30,8 @@ namespace FunctionMinimization
 
         var results = new List<OptimizationResult>
         {
-          RunDichotomy(objectiveFunction, intervalStart, intervalEnd, targetAccuracy)
+          RunDichotomy(objectiveFunction, intervalStart, intervalEnd, targetAccuracy),
+          RunBisection(objectiveFunction, intervalStart, intervalEnd, targetAccuracy)
         };
       }
       catch (Exception exception)
@@ -155,6 +156,50 @@ namespace FunctionMinimization
         IterationCount = iterationCount,
         ElapsedMilliseconds = stopwatch.Elapsed.TotalMilliseconds
       };
+    }
+
+    public static OptimizationResult RunBisection(Func<double, double> function, double intervalStart, double intervalEnd, double targetAccuracy)
+    {
+      var stopwatch = Stopwatch.StartNew();
+      int iterationCount = 0;
+
+      while ((intervalEnd - intervalStart) > targetAccuracy)
+      {
+        double middlePoint = (intervalStart + intervalEnd) / 2.0;
+        double derivativeValue = NumericalDerivative(function, middlePoint, targetAccuracy);
+
+        if (derivativeValue > 0)
+        {
+          intervalEnd = middlePoint;
+        }
+        else if (derivativeValue < 0)
+        {
+          intervalStart = middlePoint;
+        }
+        else
+        {
+          intervalStart = middlePoint;
+          intervalEnd = middlePoint;
+        }
+        iterationCount++;
+      }
+
+      stopwatch.Stop();
+      double minimumX = (intervalStart + intervalEnd) / 2.0;
+
+      return new OptimizationResult
+      {
+        MethodName = "Метод деления пополам (по производной)",
+        MinimumX = minimumX,
+        MinimumValue = function(minimumX),
+        IterationCount = iterationCount,
+        ElapsedMilliseconds = stopwatch.Elapsed.TotalMilliseconds
+      };
+    }
+
+    private static double NumericalDerivative(Func<double, double> function, double point, double step)
+    {
+      return (function(point + step) - function(point - step)) / (2 * step);
     }
   }
 
