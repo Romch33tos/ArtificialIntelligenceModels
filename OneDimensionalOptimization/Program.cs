@@ -33,10 +33,25 @@ namespace FunctionMinimization
           RunDichotomy(objectiveFunction, intervalStart, intervalEnd, targetAccuracy),
           RunBisection(objectiveFunction, intervalStart, intervalEnd, targetAccuracy)
         };
+
+        PrintResultsTable(results);
       }
       catch (Exception exception)
       {
         Console.WriteLine($"Ошибка: {exception.Message}");
+      }
+    }
+
+    static void PrintResultsTable(List<OptimizationResult> results)
+    {
+      string header = $"{"Метод",-35} | {"x_min",-12} | {"f(x_min)",-12} | {"Итерации",-10} | {"Время (мс)",-12}";
+      Console.WriteLine(header);
+      Console.WriteLine(new string('-', header.Length));
+
+      foreach (var result in results)
+      {
+        string line = $"{result.MethodName,-35} | {result.MinimumX,-12:F6} | {result.MinimumValue,-12:F6} | {result.IterationCount,-10} | {result.ElapsedMilliseconds,-12:F4}";
+        Console.WriteLine(line);
       }
     }
 
