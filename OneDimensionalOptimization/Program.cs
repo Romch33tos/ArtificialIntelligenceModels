@@ -27,6 +27,11 @@ namespace FunctionMinimization
         var (intervalStart, intervalEnd) = SvennSearch(objectiveFunction, initialPoint, stepSize);
         Console.WriteLine($"Начальный интервал неопределенности: [{intervalStart:F6}, {intervalEnd:F6}]");
         Console.WriteLine();
+
+        var results = new List<OptimizationResult>
+        {
+          RunDichotomy(objectiveFunction, intervalStart, intervalEnd, targetAccuracy)
+        };
       }
       catch (Exception exception)
       {
@@ -110,6 +115,46 @@ namespace FunctionMinimization
       }
 
       return (intervalStart, intervalEnd);
+    }
+
+    public static OptimizationResult RunDichotomy(Func<double, double> function, double intervalStart, double intervalEnd, double targetAccuracy)
+    {
+      var stopwatch = Stopwatch.StartNew();
+      int iterationCount = 0;
+
+      while ((intervalEnd - intervalStart) > targetAccuracy)
+      {
+        double middlePoint = (intervalStart + intervalEnd) / 2.0;
+        double offset = targetAccuracy / 4.0;
+
+        double leftProbe = middlePoint - offset;
+        double rightProbe = middlePoint + offset;
+
+        double leftProbeValue = function(leftProbe);
+        double rightProbeValue = function(rightProbe);
+
+        if (leftProbeValue < rightProbeValue)
+        {
+          intervalEnd = rightProbe;
+        }
+        else
+        {
+          intervalStart = leftProbe;
+        }
+        iterationCount++;
+      }
+
+      stopwatch.Stop();
+      double minimumX = (intervalStart + intervalEnd) / 2.0;
+
+      return new OptimizationResult
+      {
+        MethodName = "Метод дихотомии",
+        MinimumX = minimumX,
+        MinimumValue = function(minimumX),
+        IterationCount = iterationCount,
+        ElapsedMilliseconds = stopwatch.Elapsed.TotalMilliseconds
+      };
     }
   }
 
