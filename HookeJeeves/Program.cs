@@ -37,6 +37,21 @@ class HookeJeevesOptimization
           }
         }
       }
+
+      if (CalculateObjectiveFunction(exploratoryPoint) < CalculateObjectiveFunction(currentBasePoint))
+      {
+        double[] previousBasePoint = (double[])currentBasePoint.Clone();
+        currentBasePoint = (double[])exploratoryPoint.Clone();
+
+        for (int coordinateIndex = 0; coordinateIndex < spaceDimension; coordinateIndex++)
+        {
+          exploratoryPoint[coordinateIndex] = currentBasePoint[coordinateIndex] + 
+            accelerationMultiplier * (currentBasePoint[coordinateIndex] - previousBasePoint[coordinateIndex]);
+        }
+
+        iterationCounter++;
+        Console.WriteLine($"Итерация {iterationCounter}: Точка по образцу = ({currentBasePoint[0]:F4}, {currentBasePoint[1]:F4}), f(x) = {CalculateObjectiveFunction(currentBasePoint):F4}");
+      }
     }
   }
 }
