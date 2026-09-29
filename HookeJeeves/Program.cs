@@ -52,6 +52,41 @@ class HookeJeevesOptimization
         iterationCounter++;
         Console.WriteLine($"Итерация {iterationCounter}: Точка по образцу = ({currentBasePoint[0]:F4}, {currentBasePoint[1]:F4}), f(x) = {CalculateObjectiveFunction(currentBasePoint):F4}");
       }
+      else
+      {
+        bool tendernessReached = true;
+        for (int coordinateIndex = 0; coordinateIndex < spaceDimension; coordinateIndex++)
+        {
+          if (stepSizes[coordinateIndex] > precisionEpsilon)
+          {
+            tendernessReached = false;
+            break;
+          }
+        }
+
+        if (tendernessReached)
+        {
+          Console.WriteLine("\nОптимизация успешно завершена.");
+          Console.WriteLine($"Точка минимума x* = ({currentBasePoint[0]:F4}, {currentBasePoint[1]:F4})");
+          Console.WriteLine($"Минимум функции f(x*) = {CalculateObjectiveFunction(currentBasePoint):F6}");
+          break;
+        }
+        else
+        {
+          for (int coordinateIndex = 0; coordinateIndex < spaceDimension; coordinateIndex++)
+          {
+            if (stepSizes[coordinateIndex] > precisionEpsilon)
+            {
+              stepSizes[coordinateIndex] /= stepReductionAlpha;
+            }
+          }
+          
+          exploratoryPoint = (double[])currentBasePoint.Clone();
+          
+          iterationCounter++;
+          Console.WriteLine($"Итерация {iterationCounter} (Уменьшение шага): Шаги = ({stepSizes[0]:F4}, {stepSizes[1]:F4})");
+        }
+      }
     }
   }
 }
