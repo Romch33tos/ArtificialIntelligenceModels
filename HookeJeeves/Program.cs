@@ -20,5 +20,23 @@ class HookeJeevesOptimization
     double[] exploratoryPoint = (double[])currentBasePoint.Clone();
 
     Console.WriteLine("Запуск метода Хука-Дживса...");
+
+    while (true)
+    {
+      for (int coordinateIndex = 0; coordinateIndex < spaceDimension; coordinateIndex++)
+      {
+        double currentFunctionValue = CalculateObjectiveFunction(exploratoryPoint);
+
+        exploratoryPoint[coordinateIndex] += stepSizes[coordinateIndex];
+        if (CalculateObjectiveFunction(exploratoryPoint) >= currentFunctionValue)
+        {
+          exploratoryPoint[coordinateIndex] -= 2 * stepSizes[coordinateIndex];
+          if (CalculateObjectiveFunction(exploratoryPoint) >= currentFunctionValue)
+          {
+            exploratoryPoint[coordinateIndex] += stepSizes[coordinateIndex];
+          }
+        }
+      }
+    }
   }
 }
