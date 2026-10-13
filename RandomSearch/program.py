@@ -10,5 +10,16 @@ def target_function(point):
   return 4 * (x - 5) ** 2 + (y - 6) ** 2
 
 
+def random_search():
+  # --- Начальные параметры алгоритма ---
+  current_point = [0.0, 0.0]     # начальная точка x0
+  expand_coef = 1.5              # коэффициент расширения α
+  shrink_coef = 0.5              # коэффициент сжатия β
+  max_fails = 15                 # M — макс. число неудач подряд
+  step_size = 0.5                # t0 — начальный шаг
+  min_step = 1e-6                # R — минимальный шаг
+  max_iterations = 5000          # N — максимум итераций
+
+
 if __name__ == "__main__":
   pass
