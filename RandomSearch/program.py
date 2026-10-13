@@ -61,6 +61,17 @@ def random_search():
       iteration = iteration + 1
       fail_count = 1                        # сбрасываем счётчик неудач
 
+    else:
+      # Неудачный шаг
+      fail_count = fail_count + 1
+
+      # Слишком много неудач подряд — уменьшаем шаг
+      if fail_count >= max_fails:
+        if step_size <= min_step:
+          break                             # условие остановки
+        step_size = step_size * shrink_coef
+        fail_count = 1
+
 
 if __name__ == "__main__":
   pass
