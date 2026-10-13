@@ -20,6 +20,13 @@ def random_search():
   min_step = 1e-6                # R — минимальный шаг
   max_iterations = 5000          # N — максимум итераций
 
+  # --- Рабочие переменные ---
+  iteration = 0                  # k — счётчик успешных итераций
+  fail_count = 1                 # j — счётчик неудач подряд
+  current_value = target_function(current_point)
+
+  start_time = time.time()       # запуск таймера
+
 
 if __name__ == "__main__":
   pass
