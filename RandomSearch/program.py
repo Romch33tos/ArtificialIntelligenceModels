@@ -27,6 +27,19 @@ def random_search():
 
   start_time = time.time()       # запуск таймера
 
+  # --- Основной цикл поиска ---
+  while iteration < max_iterations:
+
+    # Случайное смещение по каждой координате в диапазоне [-1, 1]
+    random_offset = [random.uniform(-1, 1), random.uniform(-1, 1)]
+
+    # Пробная точка
+    trial_point = [
+      current_point[0] + step_size * random_offset[0],
+      current_point[1] + step_size * random_offset[1]
+    ]
+    trial_value = target_function(trial_point)
+
 
 if __name__ == "__main__":
   pass
