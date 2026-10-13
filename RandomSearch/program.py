@@ -72,6 +72,19 @@ def random_search():
         step_size = step_size * shrink_coef
         fail_count = 1
 
+  elapsed_time = time.time() - start_time   # остановка таймера
+
+  # --- Финальный вывод ---
+  exact = [5.0, 6.0]
+  distance = ((current_point[0] - exact[0]) ** 2 +
+              (current_point[1] - exact[1]) ** 2) ** 0.5
+
+  print(f"Найденная точка:   x* = [{current_point[0]:.6f}, {current_point[1]:.6f}]")
+  print(f"Значение функции:  f(x*) = {current_value:.6e}")
+  print(f"Отклонение:        {distance:.6e}")
+  print(f"Итераций:          {iteration}")
+  print(f"Время (сек):       {elapsed_time:.6f}")
+
 
 if __name__ == "__main__":
   pass
