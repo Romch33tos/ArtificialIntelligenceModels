@@ -40,6 +40,27 @@ def random_search():
     ]
     trial_value = target_function(trial_point)
 
+    # Проверяем, стало ли лучше
+    if trial_value < current_value:
+      # Удачный шаг — пробуем расшириться
+      expanded_point = [
+        current_point[0] + expand_coef * (trial_point[0] - current_point[0]),
+        current_point[1] + expand_coef * (trial_point[1] - current_point[1])
+      ]
+      expanded_value = target_function(expanded_point)
+
+      # Принимаем лучшую из двух точек
+      if expanded_value < current_value:
+        current_point = expanded_point
+        current_value = expanded_value
+      else:
+        current_point = trial_point
+        current_value = trial_value
+
+      step_size = step_size * expand_coef   # увеличиваем шаг
+      iteration = iteration + 1
+      fail_count = 1                        # сбрасываем счётчик неудач
+
 
 if __name__ == "__main__":
   pass
