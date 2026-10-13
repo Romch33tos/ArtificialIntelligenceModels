@@ -86,5 +86,6 @@ def random_search():
   print(f"Время (сек):       {elapsed_time:.6f}")
 
 
+# Точка входа
 if __name__ == "__main__":
-  pass
+  random_search()
