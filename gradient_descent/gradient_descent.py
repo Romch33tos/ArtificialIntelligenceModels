@@ -2,10 +2,8 @@ import numpy as np
 import time
 from scipy.optimize import minimize_scalar
 
-
 def objective(point):
   return 4.0 * (point[0] - 5.0) ** 2 + (point[1] - 6.0) ** 2
-
 
 def gradient(point):
   return np.array([
@@ -159,7 +157,7 @@ def main():
     if choice == "1":
       armijo_coef = 1e-4
       initial_step = 0.1
-
+      
       started_at = time.perf_counter()
       best_point, iterations_done, best_value, history, stop_reason = gradient_descent(
         start_point,
@@ -173,7 +171,6 @@ def main():
 
       print_result("ГРАДИЕНТНЫЙ СПУСК", start_point, best_point,
                    iterations_done, best_value, elapsed, stop_reason)
-
     elif choice == "2":
       started_at = time.perf_counter()
       best_point, iterations_done, best_value, history, stop_reason = steepest_descent(
@@ -186,10 +183,8 @@ def main():
 
       print_result("НАИСКОРЕЙШИЙ СПУСК", start_point, best_point,
                    iterations_done, best_value, elapsed, stop_reason)
-
     else:
       print("Неверный выбор. Введите 0, 1 или 2.")
-
 
 if __name__ == "__main__":
   main()
