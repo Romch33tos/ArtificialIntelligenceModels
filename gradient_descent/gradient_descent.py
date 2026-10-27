@@ -1,27 +1,14 @@
-import math
+import numpy as np
+import time
+from scipy.optimize import minimize_scalar
 
 
-def fmt(value, digits=4):
-  if value == 0:
-    return "0"
-  s = f"{value:.{digits}f}"
-  s = s.rstrip("0").rstrip(".")
-  if s == "-0":
-    s = "0"
-  return s
+def objective(point):
+  return 4.0 * (point[0] - 5.0) ** 2 + (point[1] - 6.0) ** 2
 
 
-def print_line(char="-", length=78):
-  print(char * length)
-
-
-def print_header(title):
-  print_line("=")
-  print(title)
-  print_line("=")
-
-
-def print_subheader(title):
-  print_line("-")
-  print(title)
-  print_line("-")
+def gradient(point):
+  return np.array([
+    8.0 * (point[0] - 5.0),
+    2.0 * (point[1] - 6.0)
+  ])
