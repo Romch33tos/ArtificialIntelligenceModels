@@ -99,3 +99,41 @@ def steepest_descent(start_point, grad_tol=1e-6, step_tol=1e-6,
     point = new_point
     iteration += 1
     history.append(point.copy())
+
+def print_result(method_name, start_point, best_point, iterations_done,
+                 best_value, elapsed, stop_reason):
+  print("=" * 55)
+  print(f"РЕЗУЛЬТАТ: {method_name}")
+  print("=" * 55)
+  print(f"Начальная точка:     x0 = {start_point}")
+  print(f"Найденная точка:     x* = [{best_point[0]:.8f}, {best_point[1]:.8f}]")
+  print(f"Значение функции:    f(x*) = {best_value:.3e}")
+  print(f"Число итераций:      k = {iterations_done}")
+  print(f"Время вычисления:    {elapsed:.6f} с")
+  print("-" * 55)
+
+  if stop_reason == "grad_norm":
+    print("Остановка: условие на шаге 4 выполнено —")
+    print("           норма градиента стала меньше eps1.")
+  elif stop_reason == "eps2_double":
+    print("Остановка: условие на шаге 9/8 выполнено —")
+    print("           шаг и изменение функции стали меньше eps2")
+    print("           на двух итерациях подряд.")
+  else:
+    print("Остановка: условие на шаге 5 выполнено —")
+    print("           достигнуто предельное число итераций M.")
+  print("-" * 55)
+
+  true_minimum = np.array([5.0, 6.0])
+  point_error = np.linalg.norm(best_point - true_minimum)
+  print("Теоретический минимум: x* = [5, 6], f = 0")
+  print(f"Отклонение по x:       {point_error:.3e}")
+  print(f"Отклонение по f:       {best_value:.3e}")
+  print("-" * 55)
+
+  if point_error < 1e-2 and best_value < 1e-4:
+    print("Алгоритм успешно нашёл точку минимума.")
+  else:
+    print("Алгоритм завершился, но до минимума не дошёл —")
+    print("попробуйте изменить параметры.")
+  print("=" * 55)
