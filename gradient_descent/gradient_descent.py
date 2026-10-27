@@ -137,3 +137,59 @@ def print_result(method_name, start_point, best_point, iterations_done,
     print("Алгоритм завершился, но до минимума не дошёл —")
     print("попробуйте изменить параметры.")
   print("=" * 55)
+
+def main():
+  start_point = [0.0, 0.0]
+  grad_tol = 1e-6
+  step_tol = 1e-6
+  max_iterations = 10000
+
+  while True:
+    print()
+    print("Выберите метод оптимизации:")
+    print("  1 - градиентный спуск")
+    print("  2 - наискорейший спуск")
+    print("  0 - завершить работу")
+    choice = input("Ваш выбор: ").strip()
+
+    if choice == "0":
+      print("Работа программы завершена.")
+      break
+
+    if choice == "1":
+      armijo_coef = 1e-4
+      initial_step = 0.1
+
+      started_at = time.perf_counter()
+      best_point, iterations_done, best_value, history, stop_reason = gradient_descent(
+        start_point,
+        armijo_coef=armijo_coef,
+        grad_tol=grad_tol,
+        step_tol=step_tol,
+        max_iterations=max_iterations,
+        initial_step=initial_step
+      )
+      elapsed = time.perf_counter() - started_at
+
+      print_result("ГРАДИЕНТНЫЙ СПУСК", start_point, best_point,
+                   iterations_done, best_value, elapsed, stop_reason)
+
+    elif choice == "2":
+      started_at = time.perf_counter()
+      best_point, iterations_done, best_value, history, stop_reason = steepest_descent(
+        start_point,
+        grad_tol=grad_tol,
+        step_tol=step_tol,
+        max_iterations=max_iterations
+      )
+      elapsed = time.perf_counter() - started_at
+
+      print_result("НАИСКОРЕЙШИЙ СПУСК", start_point, best_point,
+                   iterations_done, best_value, elapsed, stop_reason)
+
+    else:
+      print("Неверный выбор. Введите 0, 1 или 2.")
+
+
+if __name__ == "__main__":
+  main()
