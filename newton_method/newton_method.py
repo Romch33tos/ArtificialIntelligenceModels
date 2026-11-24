@@ -89,3 +89,26 @@ def newton_method(func, initial_point, eps1=1e-6, eps2=1e-6, max_iterations=100)
     current_point = next_point
     iteration += 1
 
+# здесь можно поменять начальную точку, точности и лимит итераций
+start_point = [0.0, 0.0]
+precision_eps1 = 1e-6
+precision_eps2 = 1e-6
+max_iter = 100
+
+# замеряем время работы алгоритма
+start_time = time.perf_counter()
+optimal_point, optimal_value, total_iterations = newton_method(
+  objective_function,
+  start_point,
+  eps1=precision_eps1,
+  eps2=precision_eps2,
+  max_iterations=max_iter
+)
+elapsed_time = time.perf_counter() - start_time
+
+print("x* =", optimal_point)
+print("f(x*) =", optimal_value)
+print("Количество итераций:", total_iterations)
+print(f"Время выполнения: {elapsed_time:.6f} сек.")
+
+
