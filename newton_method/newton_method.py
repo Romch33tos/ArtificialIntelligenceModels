@@ -40,3 +40,52 @@ def is_positive_definite(matrix):
   except np.linalg.LinAlgError:
     return False
 
+def newton_method(func, initial_point, eps1=1e-6, eps2=1e-6, max_iterations=100):
+  current_point = np.array(initial_point, dtype=float)
+  iteration = 0
+  # флаг для запоминания, выполнилось ли условие остановки на прошлой итерации
+  prev_condition_met = False
+
+  while True:
+    gradient = compute_gradient(func, current_point)
+
+    # первый критерий выхода: норма градиента достаточно мала
+    if np.linalg.norm(gradient) <= eps1:
+      return current_point, func(current_point), iteration
+
+    # защита от бесконечного цикла по числу шагов
+    if iteration >= max_iterations:
+      return current_point, func(current_point), iteration
+
+    # строим матрицу Гессе и сразу ищем обратную к ней
+    hessian = compute_hessian(func, current_point)
+    inverse_hessian = np.linalg.inv(hessian)
+
+    if is_positive_definite(inverse_hessian):
+      # классический шаг Ньютона, если матрица положительно определена
+      direction = -np.dot(inverse_hessian, gradient)
+      step_size = 1.0
+    else:
+      # если матрица не подходит, идем по антиградиенту и дробим шаг пополам
+      direction = -gradient
+      step_size = 1.0
+      while func(current_point + step_size * direction) >= func(current_point):
+        step_size *= 0.5
+
+    # переходим в новую точку
+    next_point = current_point + step_size * direction
+
+    # проверяем сходимость по изменению координат и самой функции
+    step_diff = np.linalg.norm(next_point - current_point)
+    func_diff = abs(func(next_point) - func(current_point))
+    current_condition_met = (step_diff < eps2) and (func_diff < eps2)
+
+    # выходим, только если оба условия сработали дважды подряд (на k и k-1)
+    if current_condition_met and prev_condition_met:
+      return next_point, func(next_point), iteration + 1
+
+    # обновляем переменные перед следующей итерацией
+    prev_condition_met = current_condition_met
+    current_point = next_point
+    iteration += 1
+
