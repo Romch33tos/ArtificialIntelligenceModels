@@ -28,3 +28,15 @@ def compute_hessian(func, point, step=1e-5):
     grad_backward = compute_gradient(func, point_backward)
     hessian[:, i] = (grad_forward - grad_backward) / (2.0 * step)
   return hessian
+
+def is_positive_definite(matrix):
+  # сначала проверяем симметричность матрицы
+  if not np.allclose(matrix, matrix.T):
+    return False
+  # критерий Сильвестра через разложение Холецкого: если не упало с ошибкой, значит > 0
+  try:
+    np.linalg.cholesky(matrix)
+    return True
+  except np.linalg.LinAlgError:
+    return False
+
